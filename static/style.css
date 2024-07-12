@@ -1,0 +1,122 @@
+/*style.css*/
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+}
+.custom-header {
+    width: calc(100vw - 250px);  /* 가로 너비를 100vw에서 250px를 뺀 값으로 설정 */
+    margin-left : 250px;
+    transition: margin-left 0.3s ease;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+}
+.second-header {
+    top: 88px;
+}
+
+.headerClosed {
+    width: calc(100vw - 50px);
+    margin-left: 50px;
+}
+.header-icon{
+    margin-right:5px;
+    width:20px;
+    height:20px;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px;
+    margin-top : 161px;
+    transition: margin-left 0.3s ease;
+}
+
+.contentClosed {
+    margin-left: 50px;
+}
+
+/* sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease;
+    z-index: 1;
+    padding: 20px 20px 0 20px; /*가로 스크롤 바 위치*/
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarClosed {
+    width: 50px;
+}
+
+.toggle {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#directoryTree {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 0; /*스크롤 바 위치*/
+    margin-top: 0;
+}
+
+ul {
+    cursor: pointer;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    white-space: nowrap;
+}
+
+span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.barIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.plotter {
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.contentTitle {
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.point_label_tool{
+    margin-left : 70px;
+    display:none;
+}
+

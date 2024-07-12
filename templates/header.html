@@ -1,0 +1,25 @@
+<!--header.html-->
+<header class="bg-primary text-white px-5 py-3 custom-header">
+    <h1>AWESOME-PLOT</h1>
+</header>
+<header class="bg-white d-flex border-bottom justify-content-center py-3 custom-header second-header">
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="http://127.0.0.1:5000" class="nav-link " aria-current="page"><img class = "header-icon" src="{{ url_for('static', filename='svgs/cat.svg') }}" alt="Icon">Trend</a></li>
+        <li class="nav-item"><a href="http://127.0.0.1:5000/single" class="nav-link "><img class = "header-icon" src="{{ url_for('static', filename='svgs/cat2.svg') }}" alt="Icon">Single</a></li>
+        <li class="nav-item"><a href="http://127.0.0.1:5000/dual" class="nav-link"><img class = "header-icon" src="{{ url_for('static', filename='svgs/cloud.svg') }}" alt="Icon">Dual</a></li>
+        <li class="nav-item"><a href="http://127.0.0.1:5000/multi" class="nav-link"><img class = "header-icon" src="{{ url_for('static', filename='svgs/insta.svg') }}" alt="Icon">Multi</a></li>
+    </ul>
+</header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var currentUrl = window.location.href;
+        var navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(function(link) {
+            if (link.href === currentUrl) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>

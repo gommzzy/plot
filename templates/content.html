@@ -1,0 +1,58 @@
+<!--content.html-->
+<div class="content">
+    <div class="btn_area">
+        {% if page_type in ['multi','single'] %}
+            <div id="plotTypeBtn" class="btn-group" role="group">
+                <input type="radio" name="plot_type" id="btn1" class="btn-check" value="1" checked>
+                <label class="btn btn-outline-primary px-3" for="btn1">Wave form</label><br>
+
+                <input type="radio" name="plot_type" id="btn2" class="btn-check" value="2">
+                <label class="btn btn-outline-primary px-3" for="btn2">Spectrum</label>
+            </div>
+        {% elif page_type =="trend" %}
+            <div id="plotTypeBtn" class="btn-group" role="group">
+                <input type="radio" name="plot_type" id="btn1" class="btn-check" value="1" checked>
+                <label class="btn btn-outline-primary px-3" for="btn1">Overall</label><br>
+
+                <input type="radio" name="plot_type" id="btn2" class="btn-check" value="2">
+                <label class="btn btn-outline-primary px-3" for="btn2">Wave form</label>
+
+                <input type="radio" name="plot_type" id="btn3" class="btn-check" value="3">
+                <label class="btn btn-outline-primary px-3" for="btn3">Spectrum</label>
+            </div>
+        {% endif %}
+        <div id="peckTypeBtn" class="btn-group" role="group">
+            <input type="radio" name="peck_type" id="peck1" class="btn-check" value="1" checked>
+            <label class="btn btn-outline-primary px-3" for="peck1">peak</label><br>
+
+            <input type="radio" name="peck_type" id="peck2" class="btn-check" value="2">
+            <label class="btn btn-outline-primary px-3" for="peck2">peak to peak</label>
+        </div>
+    </div>
+    <div class="graph">
+        <div class="graph_area">
+            {% for plot in plots %}
+                <div>{{ plot|safe }}</div>
+            {% endfor %}
+        </div>
+        <div class="point_label_tool row">
+            <div id="pointToolBtn" class="btn-group col" role="group">
+                <input type="radio" name="tool" id="tool1" class="btn-check" value="1" >
+                    <label class="btn btn-outline-primary px-3" for="tool1">
+                        <img class = "header-icon" src="{{ url_for('static', filename='svgs/graph3.svg') }}" alt="Icon">Single
+                    </label>
+                <input type="radio" name="tool" id="tool2" class="btn-check" value="1" >
+                    <label class="btn btn-outline-primary px-3" for="tool2">
+                        <img class = "header-icon" src="{{ url_for('static', filename='svgs/graph2.svg') }}" alt="Icon">Harmonics
+                    </label>
+                <input type="radio" name="tool" id="tool3" class="btn-check" value="1" >
+                    <label class="btn btn-outline-primary px-3" for="tool3">
+                        <img class = "header-icon" src="{{ url_for('static', filename='svgs/graph1.svg') }}" alt="Icon">Sideband
+                    </label>
+            </div>
+            <input type="number" id="inputNumber" class="form-control col" placeholder="Enter X value">
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+    </div>
+</div>
