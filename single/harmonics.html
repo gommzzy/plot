@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Plotly Line Chart</title>
+    <!-- Plotly CDN을 통해 필요한 자바스크립트 파일을 로드 -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Bootstrap CSS 추가 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Flask with Plotly Line Chart</h1>
+
+        <!-- 그래프를 표시할 DIV -->
+        <div id="plotly-graph" class="mb-5"></div>
+
+        <!-- 입력 필드와 버튼 -->
+        <form id="point-form" class="form-inline justify-content-center">
+            <div class="form-group mb-2">
+                <label for="new_value" class="sr-only">Enter a number:</label>
+                <input type="number" id="new_value" name="new_value" class="form-control" placeholder="Enter a number" required>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 ml-2">Add Point</button>
+        </form>
+    </div>
+    <script>
+document.getElementById('point-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formValue = document.getElementById('new_value').value;
+
+    fetch('/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'new_value=' + formValue
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 서버로부터 그래프 데이터 업데이트 후 그래프 재렌더링
+        var graph_data = data.graph_json;
+        Plotly.newPlot('plotly-graph', graph_data.data, graph_data.layout);
+    });
+});
+
+var graph_data = {{ graph_json | safe }};
+Plotly.newPlot('plotly-graph', graph_data.data, graph_data.layout);
+
+function drawLinesAtIntervals(interval) {
+    var shapes = [];
+    var xValues = graph_data.data[0].x;
+
+    for (var i = 0; i < xValues.length; i++) {
+        if (xValues[i] % interval === 0 && xValues[i] !== 0) {
+            shapes.push({
+                type: 'line',
+                x0: xValues[i],
+                y0: Math.min(...graph_data.data[0].y),
+                x1: xValues[i],
+                y1: Math.max(...graph_data.data[0].y),
+                line: {
+                    color: '#007bff',
+                    width: 2,
+                    dash: 'dashdot'
+                }
+            });
+        }
+    }
+
+    Plotly.relayout('plotly-graph', {
+        shapes: shapes
+    });
+}
+
+// 입력 필드의 값이 변경될 때마다 눈금선을 업데이트
+document.getElementById('new_value').addEventListener('input', function() {
+    var formValue = this.value ? parseFloat(this.value) : 1;
+    drawLinesAtIntervals(formValue);
+});
+
+// 초기 그래프 로드 시에도 기본 간격으로 라인 추가
+var formValueElement = document.getElementById('new_value');
+var formValue = formValueElement.value ? parseFloat(formValueElement.value) : 1;
+drawLinesAtIntervals(formValue);
+
+    </script>
+</body>
+</html>
