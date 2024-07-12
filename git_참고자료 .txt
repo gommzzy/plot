@@ -1,0 +1,6 @@
+git_참고자료 
+
+https://12716.tistory.com/entry/git-remote-Repository-not-found
+[git] remote: Repository not found. (로컬 자격증명 삭제_전임자 계정)
+https://bumday.tistory.com/28
+Git Private repository clone시 not found 문제
