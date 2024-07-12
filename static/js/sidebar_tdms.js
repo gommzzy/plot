@@ -1,6 +1,4 @@
 //sidbar_tdms.js
-var graph;
-
 $(document).ready(function(){
     var path;
     var fileName;
@@ -53,21 +51,7 @@ $(document).ready(function(){
         });
     }
 
-    $('input[id="tool1"]').change(function() {
-        if ($(this).is(':checked')) {
-            graph = document.getElementsByClassName('plotly-graph-div')[0];
-            graph.on('plotly_click', function(data){
-                createAnnotation(data)
-            });
-        }
-    });
-
-    $('#inputNumber').on('input', function(event) {
-        var enteredX = parseFloat($(event.target).val());
-        findYValueForX(enteredX);
-    });
-
-    // Handle plot_type radio button change
+        // Handle plot_type radio button change
     $('input[name="plot_type"]').change(function() {
         if ($(this).is(':checked')) {
             plotTypeVar = $(this).val();
@@ -93,54 +77,5 @@ $(document).ready(function(){
             });
         }
     });
+
 });
-
-function createAnnotation(data) {
-    var x = data.points[0].x;
-    var y = data.points[0].y;
-    var format_y = (y * 1e9).toFixed(2) + 'n';
-    var pointInfo = ` x : (${x.toFixed(0)}), y : (${format_y}) `;
-
-    var update = {
-        annotations: [{
-            x: x, y: y, xref: 'x', yref: 'y',
-            text: pointInfo,
-            showarrow: true,
-            arrowhead: 1, ax: 0, ay: -40,
-            font: {
-                family: 'Arial, sans-serif',
-                size: 14,
-                color: '#007bff'
-            },
-            align: 'center', arrowcolor: '#007bff',
-            bgcolor: 'white',
-            bordercolor: '#007bff',
-            borderwidth: 2,
-            borderpad: 2,
-        }],
-        shapes: [{
-            type: 'line', x0: x, x1: x, y0: 0,
-            y1: 1, xref: 'x', yref: 'paper',
-            line: {
-                color: 'gray',
-                width: 1,
-                dash: 'dash'
-            }
-        }]
-    };
-    Plotly.relayout(graph, update);
-}
-
-function findYValueForX(xValue) {
-    var xData = graph.data[0].x;
-    var yData = graph.data[0].y;
-
-    var closestIndex = xData.reduce(function(prev, curr, currentIndex) {
-        return (Math.abs(curr - xValue) < Math.abs(xData[prev] - xValue) ? currentIndex : prev);
-    }, 0);
-
-    var closestX = xData[closestIndex];
-    var closestY = yData[closestIndex];
-
-    createAnnotation({ points: [{ x: closestX, y: closestY }] });
-}

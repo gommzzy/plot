@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Flask Plotly Line Chart</title>
@@ -7,6 +7,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- Bootstrap CSS 추가 -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div class="container mt-5">
@@ -24,80 +25,103 @@
             <button type="submit" class="btn btn-primary mb-2 ml-2">Add Point</button>
         </form>
     </div>
-
     <script>
-        // Flask에서 전달된 JSON 데이터를 파싱하여 그래프를 그립니다.
-        var graph_data = {{ graph_json | safe }};
+// side band.js
+// Flask에서 전달된 JSON 데이터를 파싱하여 그래프를 그립니다.
+document.getElementById('point-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formValue = document.getElementById('new_value').value;
+
+    fetch('/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'new_value=' + formValue
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 서버로부터 그래프 데이터 업데이트 후 그래프 재렌더링
+        var graph_data = data.graph_json;
         Plotly.newPlot('plotly-graph', graph_data.data, graph_data.layout);
+    });
+});
 
-        document.getElementById('plotly-graph').on('plotly_click', function(data){
-            var point = data.points[0];
-            var x = point.x;
-            var y = point.y;
 
-            // 폼으로부터 입력된 값 가져오기, 값이 없으면 기본값 1로 설정
-            var formValueElement = document.getElementById('new_value');
-            var formValue = formValueElement.value ? parseFloat(formValueElement.value) : 1;
+var graph_data = {{ graph_json | safe }};
+Plotly.newPlot('plotly-graph', graph_data.data, graph_data.layout);
 
-            // 클릭된 포인트의 인덱스 찾기
-            var index = point.pointIndex;
+document.getElementById('plotly-graph').on('plotly_click', function(data){
+    var point = data.points[0];
+    var x = point.x;
+    var y = point.y;
 
-            // 새로운 라벨 목록 및 y축 눈금선 목록
-            var holdLabels = [];
-            var shapes = [];
+    // 폼으로부터 입력된 값 가져오기, 값이 없으면 기본값 1로 설정
+    var formValueElement = document.getElementById('new_value');
+    var formValue = formValueElement.value ? parseFloat(formValueElement.value) : 1;
 
-            // x에서 formValue만큼 차이나는 모든 포인트의 라벨 및 y축 눈금선 추가
-            for (var i = 0; i < graph_data.data[0].x.length; i++) {
-                if (Math.abs(i - index) == formValue) {
-                    holdLabels.push({
-                        x: graph_data.data[0].x[i],
-                        y: graph_data.data[0].y[i],
-                        text: `(${graph_data.data[0].x[i]}, ${graph_data.data[0].y[i]})`,
-                        showarrow: true,
-                        arrowhead: 7,
-                        ax: 0,
-                        ay: -40,
-                        font: {
-                            family: 'Arial, sans-serif',
-                            size: 12,
-                            color: '#ffffff'
-                        },
-                        align: 'center',
-                        arrowcolor: '#007bff',
-                        arrowsize: 1,
-                        arrowwidth: 2,
-                        bgcolor: '#007bff',
-                        bordercolor: '#0056b3',
-                        borderwidth: 2,
-                        borderpad: 4,
-                        borderRadius: '5px'
-                    });
-                    shapes.push({
-                        type: 'line',
-                        x0: graph_data.data[0].x[i],
-                        y0: Math.min(...graph_data.data[0].y),
-                        x1: graph_data.data[0].x[i],
-                        y1: Math.max(...graph_data.data[0].y),
-                        line: {
-                            color: '#007bff',
-                            width: 2,
-                            dash: 'dashdot'
-                        }
-                    });
-                }
-            }
+    // 클릭된 포인트의 인덱스 찾기
+    var index = point.pointIndex;
 
-            // 레이아웃 업데이트
-            Plotly.relayout('plotly-graph', {
-                annotations: holdLabels,
-                shapes: shapes
+    // 새로운 라벨 목록 및 y축 눈금선 목록
+    var holdLabels = [];
+    var shapes = [];
+
+    // x에서 formValue만큼 차이나는 모든 포인트의 라벨 및 y축 눈금선 추가
+    for (var i = 0; i < graph_data.data[0].x.length; i++) {
+        if (Math.abs(i - index) == formValue) {
+            holdLabels.push({
+                x: graph_data.data[0].x[i],
+                y: graph_data.data[0].y[i],
+                text: `(${graph_data.data[0].x[i]}, ${graph_data.data[0].y[i]})`,
+                showarrow: true,
+                arrowhead: 7,
+                ax: 0,
+                ay: -40,
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 12,
+                    color: '#ffffff'
+                },
+                align: 'center',
+                arrowcolor: '#007bff',
+                arrowsize: 1,
+                arrowwidth: 2,
+                bgcolor: '#007bff',
+                bordercolor: '#0056b3',
+                borderwidth: 2,
+                borderpad: 4,
+                borderRadius: '5px'
             });
-        });
+            shapes.push({
+                type: 'line',
+                x0: graph_data.data[0].x[i],
+                y0: Math.min(...graph_data.data[0].y),
+                x1: graph_data.data[0].x[i],
+                y1: Math.max(...graph_data.data[0].y),
+                line: {
+                    color: '#007bff',
+                    width: 2,
+                    dash: 'dashdot'
+                }
+            });
+        }
+    }
 
-        // 폼 제출 이벤트 처리 (페이지 새로고침 방지)
-        document.getElementById('point-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-        });
+    // 레이아웃 업데이트
+    Plotly.relayout('plotly-graph', {
+        annotations: holdLabels,
+        shapes: shapes
+    });
+});
+
+// 폼 제출 이벤트 처리 (페이지 새로고침 방지)
+document.getElementById('point-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+});
+
     </script>
+
 </body>
 </html>

@@ -35,7 +35,7 @@
                 <div>{{ plot|safe }}</div>
             {% endfor %}
         </div>
-        <div class="point_label_tool row">
+        <div class="point_label_tool row column-gap-3">
             <div id="pointToolBtn" class="btn-group col" role="group">
                 <input type="radio" name="tool" id="tool1" class="btn-check" value="1" >
                     <label class="btn btn-outline-primary px-3" for="tool1">
@@ -50,7 +50,8 @@
                         <img class = "header-icon" src="{{ url_for('static', filename='svgs/graph1.svg') }}" alt="Icon">Sideband
                     </label>
             </div>
-            <input type="number" id="inputNumber" class="form-control col" placeholder="Enter X value">
+            <input type="number" id="inputNumber" class="form-control col" placeholder="x의 인덱스를 입력하세요.">
+            <input type="number" id="inputFreq" class="form-control col" placeholder="간격을 입력하세요." value = 1000>
             <div class="col"></div>
             <div class="col"></div>
         </div>
